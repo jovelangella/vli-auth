@@ -23,6 +23,7 @@ Route::middleware('auth:api')->get('u/user', function (Request $request) {
  *      u - user
  *      c - client
  *      s - system
+ *      l - library
  */
 
 // use in : Authentication, Access Token, User Create (Admin Side), Access Control
@@ -35,4 +36,10 @@ Route::post('/c/register', 'Client\ClientController@register')->name('c.register
 Route::post('/s/login', 'System\SystemController@login')->name('s.login');
 Route::post('/s/register', 'System\SystemController@register')->middleware('auth:api')->name('s.register');
 
+// main dashboard route
+Route::get('u/maintenance/masterfile/{primekey?}', 'Maintenance\MasterFileController@index')->middleware('auth:api')->name('u.maintenance.masterfile');
+
+// library
+Route::get('l/helper/positions/{primekey?}', 'Helper\Helper@positions')->middleware('auth:api')->name('l.helper.positions');
+Route::get('l/helper/emplstat', 'Helper\Helper@employmentStatus')->middleware('auth:api')->name('l.helper.emplstat');
 
