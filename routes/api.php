@@ -40,6 +40,7 @@ Route::post('/s/register', 'System\SystemController@register')->middleware('auth
 Route::get('u/maintenance/masterfile/{primekey?}', 'Maintenance\MasterFileController@index')->middleware('auth:api')->name('u.maintenance.masterfile');
 
 // library
+Route::get('l/helper/employee/maxid/{primekey?}', 'Helper\Helper@employeeCode')->middleware('auth:api')->name('l.helper.employee.code');
 Route::get('l/helper/positions/{primekey?}', 'Helper\Helper@positions')->middleware('auth:api')->name('l.helper.positions');
 Route::get('l/helper/emplstat', 'Helper\Helper@employmentStatus')->middleware('auth:api')->name('l.helper.emplstat');
 Route::get('l/helper/workstat/{primekey?}', 'Helper\Helper@workStat')->middleware('auth:api')->name('l.helper.workstat');

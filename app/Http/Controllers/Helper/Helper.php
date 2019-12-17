@@ -127,4 +127,21 @@ class Helper extends Controller
 
         return response()->json($positions, 200);
     }
+
+    public function employeeCode (Request $request)
+    {
+        $employeeCode = DB::table('s_empl_mst')
+            ->where('primekey', $request->primekey)
+            ->max('empl_cde');
+        
+        if (!is_null(rtrim($employeeCode))){
+            $employeeCode = rtrim($employeeCode);
+            $employeeCode ++;
+        } else {
+            $employeeCode = 0;
+            $employeeCode ++;
+        }
+
+        return response()->json($employeeCode, 200);
+    }
 }
