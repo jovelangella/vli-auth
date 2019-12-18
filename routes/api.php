@@ -39,6 +39,9 @@ Route::post('/s/register', 'System\SystemController@register')->middleware('auth
 // main dashboard route
 Route::get('u/maintenance/masterfile/{primekey?}', 'Maintenance\MasterFileController@index')->middleware('auth:api')->name('u.maintenance.masterfile');
 
+// personnel
+Route::get('u/personnel/encode/directory/list/{primekey?}', 'Personnel\PersonnelController@directories')->middleware('auth:api')->name('u.personnel.encode.directory.list');
+
 // library
 Route::get('l/helper/employee/maxid/{primekey?}', 'Helper\Helper@employeeCode')->middleware('auth:api')->name('l.helper.employee.code');
 Route::get('l/helper/positions/{primekey?}', 'Helper\Helper@positions')->middleware('auth:api')->name('l.helper.positions');
