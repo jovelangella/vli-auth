@@ -41,6 +41,7 @@ Route::get('u/maintenance/masterfile/{primekey?}', 'Maintenance\MasterFileContro
 
 // personnel
 Route::get('u/personnel/encode/directory/list/{primekey?}', 'Personnel\PersonnelController@directories')->middleware('auth:api')->name('u.personnel.encode.directory.list');
+// Route::post('u/personnel/encode/create/dtr/folder', 'Personnel\PersonnelController@createDtrFolder')->middleware('auth:api')->name('u.personnel.encode.create.dtr.folder');
 
 // library
 Route::get('l/helper/employee/maxid/{primekey?}', 'Helper\Helper@employeeCode')->middleware('auth:api')->name('l.helper.employee.code');

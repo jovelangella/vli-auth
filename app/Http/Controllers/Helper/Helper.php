@@ -127,7 +127,7 @@ class Helper extends Controller
 
         return response()->json($positions, 200);
     }
-
+    
     public function employeeCode (Request $request)
     {
         $employeeCode = DB::table('s_empl_mst')

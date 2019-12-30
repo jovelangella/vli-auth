@@ -21,4 +21,49 @@ class PersonnelController extends Controller
         
         return response()->json($directories, 200);
     }
+
+    public function createDtrFolder(Request $request)
+    {
+        foreach ($request->dtr_date as $dtr_date) {
+
+            $max = $this->getMaximumID($primekey);
+
+            DB::table('l_dtr_hdr_')
+            ->insert([
+                'primekey' => $primekey,
+                'cntrl_no' => $max,
+                'dtr_date' => $dtr_date,
+                'day_type' => '01',
+                'ttl_empl' => 0,
+                'ttl_err_' => 0,
+                'creat_dt' => Carbon::now()->format('Y-m-d'),
+                'creat_by' => '0000',
+                'compweek' => 'F'
+            ]);
+        }
+
+        DB::table('q_payr_dir')
+        ->where('primekey', $primekey)
+        ->where('cntrl_no', $cntrl_no)
+        ->update([
+            'dtr_fldr' => 'T'
+        ]);
+    }
+    
+    public function getMaximumID($primekey)
+    {
+        $max = DB::table('l_dtr_hdr_')
+        ->where('primekey', $primekey)
+        ->max('cntrl_no');
+
+        if (!is_null(rtrim($max))){
+            $max = rtrim($max);
+            $max ++;
+        } else {
+            $max = 0;
+            $max ++;
+        }
+
+        return $max;
+    }
 }
