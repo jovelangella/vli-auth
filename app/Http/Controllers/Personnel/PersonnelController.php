@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Personnel;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
+use Carbon\Carbon;
 
 class PersonnelController extends Controller
 {
@@ -24,46 +25,63 @@ class PersonnelController extends Controller
 
     public function createDtrFolder(Request $request)
     {
-        foreach ($request->dtr_date as $dtr_date) {
+        foreach ($request->dateArray as $dateArray) {
 
-            $max = $this->getMaximumID($primekey);
+            $cntrl_no = $this->maxCntrlNo($request->primekey);
+            
+            DB::beginTransaction();
 
-            DB::table('l_dtr_hdr_')
-            ->insert([
-                'primekey' => $primekey,
-                'cntrl_no' => $max,
-                'dtr_date' => $dtr_date,
-                'day_type' => '01',
-                'ttl_empl' => 0,
-                'ttl_err_' => 0,
-                'creat_dt' => Carbon::now()->format('Y-m-d'),
-                'creat_by' => '0000',
-                'compweek' => 'F'
-            ]);
+            try {
+                DB::table('l_dtr_hdr_')
+                    ->insert([
+                    'primekey' => $request->primekey,
+                    'cntrl_no' => $cntrl_no,
+                    'dtr_date' => $dateArray,
+                    'day_type' => '01',
+                    'ttl_empl' => 0,
+                    'ttl_err_' => 0,
+                    'creat_dt' => Carbon::now()->format('Y-m-d'),
+                    'creat_by' => '0000',
+                    'compweek' => 'F'
+                    ]);
+
+                DB::table('q_payr_dir')
+                    ->where('primekey', $request->primekey)
+                    ->where('cntrl_no', $request->cntrl_no)
+                    ->update([
+                        'dtr_fldr' => 'T'
+                ]);
+            } catch(ValidationException $e)
+            {
+                // Rollback and then redirect
+                // back to form with errors
+                DB::rollback();
+                return Redirect::to('/form')
+                    ->withErrors( $e->getErrors() )
+                    ->withInput();
+            } catch(\Exception $e)
+            {
+                DB::rollback();
+                throw $e;
+            }
+            DB::commit();
         }
-
-        DB::table('q_payr_dir')
-        ->where('primekey', $primekey)
-        ->where('cntrl_no', $cntrl_no)
-        ->update([
-            'dtr_fldr' => 'T'
-        ]);
     }
     
-    public function getMaximumID($primekey)
+    public function maxCntrlNo($primekey)
     {
-        $max = DB::table('l_dtr_hdr_')
+        $cntrl_no = DB::table('l_dtr_hdr_')
         ->where('primekey', $primekey)
         ->max('cntrl_no');
 
-        if (!is_null(rtrim($max))){
-            $max = rtrim($max);
-            $max ++;
+        if (!is_null(rtrim($cntrl_no))){
+            $cntrl_no = rtrim($cntrl_no);
+            $cntrl_no ++;
         } else {
-            $max = 0;
-            $max ++;
+            $cntrl_no = 0;
+            $cntrl_no ++;
         }
 
-        return $max;
+        return $cntrl_no;
     }
 }
