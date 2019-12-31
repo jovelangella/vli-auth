@@ -40,8 +40,9 @@ Route::post('/s/register', 'System\SystemController@register')->middleware('auth
 Route::get('u/maintenance/masterfile/{primekey?}', 'Maintenance\MasterFileController@index')->middleware('auth:api')->name('u.maintenance.masterfile');
 
 // personnel
-Route::get('u/personnel/encode/directory/list/{primekey?}', 'Personnel\PersonnelController@directories')->middleware('auth:api')->name('u.personnel.encode.directory.list');
-Route::post('u/personnel/encode/create/dtr/folder', 'Personnel\PersonnelController@createDtrFolder')->middleware('auth:api')->name('u.personnel.encode.create.dtr.folder');
+Route::get('u/personnel/directory/directories/{primekey?}', 'Personnel\PersonnelController@directories')->middleware('auth:api')->name('u.personnel.directory.directories');
+Route::post('u/personnel/directory/create/folder', 'Personnel\PersonnelController@createDtrFolder')->middleware('auth:api')->name('u.personnel.directory.create.folder');
+Route::get('u/personnel/directory/folder/{primekey?}/{cntrl_no?}', 'Personnel\PersonnelController@folder')->middleware('auth:api')->name('u.personnel.directory.folder');
 
 // library
 Route::get('l/helper/employee/maxid/{primekey?}', 'Helper\Helper@employeeCode')->middleware('auth:api')->name('l.helper.employee.code');
