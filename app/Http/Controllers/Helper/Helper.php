@@ -8,6 +8,17 @@ use DB;
 
 class Helper extends Controller
 {
+    public function dayType(Request $request)
+    {
+        // this table use in rates
+        $day_type = DB::table('l_day_type')
+            ->select('cntrl_no','descript')
+            ->where('primekey', $request->primekey)
+            ->get();
+
+        return response()->json($day_type, 200);
+    }
+
     public function philhealth(Request $request)
     {
         $philhealth = DB::table('l_emplgovn')

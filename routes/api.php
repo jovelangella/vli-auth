@@ -43,6 +43,7 @@ Route::get('u/maintenance/masterfile/{primekey?}', 'Maintenance\MasterFileContro
 Route::get('u/personnel/directory/directories/{primekey?}', 'Personnel\PersonnelController@directories')->middleware('auth:api')->name('u.personnel.directory.directories');
 Route::post('u/personnel/directory/create/folder', 'Personnel\PersonnelController@createDtrFolder')->middleware('auth:api')->name('u.personnel.directory.create.folder');
 Route::get('u/personnel/directory/folder/{primekey?}/{cntrl_no?}', 'Personnel\PersonnelController@folder')->middleware('auth:api')->name('u.personnel.directory.folder');
+Route::patch('u/personnel/directory/folder/daytype/{primekey?}/{cntrl_no?}/{day_type?}', 'Personnel\PersonnelController@updateDayType')->middleware('auth:api')->name('u.personnel.directory.folder.daytype');
 
 // library
 Route::get('l/helper/employee/maxid/{primekey?}', 'Helper\Helper@employeeCode')->middleware('auth:api')->name('l.helper.employee.code');
@@ -57,3 +58,4 @@ Route::get('l/helper/government/tin/{primekey?}/{empl_cde?}', 'Helper\Helper@tin
 Route::get('l/helper/government/sss/{primekey?}', 'Helper\Helper@sss')->middleware('auth:api')->name('l.helper.government.sss'); // sss number
 Route::get('l/helper/government/pagibig/{primekey?}', 'Helper\Helper@pagibig')->middleware('auth:api')->name('l.helper.government.pagibig'); // pagibig number
 Route::get('l/helper/government/philhealth/{primekey?}', 'Helper\Helper@philhealth')->middleware('auth:api')->name('l.helper.government.pagibig'); // philhealth number
+Route::get('l/helper/daytype/{primekey?}', 'Helper\Helper@dayType')->middleware('auth:api')->name('l.helper.daytype');

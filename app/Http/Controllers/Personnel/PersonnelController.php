@@ -9,6 +9,14 @@ use Carbon\Carbon;
 
 class PersonnelController extends Controller
 {
+    public function updateDayType(Request $request)
+    {
+        return DB::table('l_dtr_hdr_')
+        ->where('primekey', $request->primekey)
+        ->where('cntrl_no', $request->cntrl_no)
+        ->update(['day_type' => $request->day_type]);
+    }
+
     public function folder(Request $request)
     {
         $dtr_date = DB::table('q_payr_dir')
