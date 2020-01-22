@@ -3,14 +3,19 @@
 namespace App\Http\Controllers\Authentication;
 
 use App\Http\Controllers\Controller;
+use App\Models\SystemControl;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\User;
 use App\Subscriber;
+use App\Models\UserAssign;
 use Carbon\Carbon;
+use DB;
 
 class AuthController extends Controller
 {
+    public $succsesStatus = 200;
+
     public function login(Request $request)
     {
         /**
@@ -32,13 +37,7 @@ class AuthController extends Controller
 
             return $response->getBody();
         } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-            if($e->getCode() == 400) {
-                return response()->json('Invalid Request. Please enter a username or a password.', $e->getCode());
-            } else if ($e->getCode() == 401) {
-                return response()->json('Your credentials are incorrect. Please try again', $e->getCode());
-            }
-
-            return response()->json('Something went wrong on the server.', $e->getCode());
+            return $e->getResponse()->getBody()->getContents();
         }
     }
 
@@ -93,6 +92,23 @@ class AuthController extends Controller
             'disabled' => 'F',
             'added_dt' => Carbon::now()->format('Y-m-d')
         ]);
+    }
+    
+    // s_vli_subs_user_asgn
+    public function userAssigned(Request $request)
+    {  
+        $primekey = UserAssign::where([['vli_subs', $request->vli_subs], ['user_num', $request->user_num]])
+                        ->value('primekey');
+        
+        return response()->json(['primekey' => $primekey], 200);
+    }
+
+    // s_sys_ctrl
+    public function userAssignedCompany(Request $request)
+    {
+        // if component requires array, do not return this to json file instead return array
+        return SystemControl::select('primekey','co_name_')->where('primekey', $request->primekey)->get();
+
     }
 
     public function logout()
